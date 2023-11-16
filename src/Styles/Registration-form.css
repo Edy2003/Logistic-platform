@@ -1,0 +1,132 @@
+html,body{
+    width:100%;
+    height: 100%;
+    margin: 0;
+    background-color: #d5d7d8;
+
+}
+h1,h2,h3{
+    color: #2d4b48;
+    font-family: "Times New Roman";
+}
+#root{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    height: 100%;
+}
+header{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header div{
+    display: flex;
+    align-items: center;
+}
+header div h3{
+    margin-right: 15px;
+}
+.logo{
+    color: #2d4b48;
+    font-family: "Times New Roman";
+    font-size: 46px;
+    font-weight: 600;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+}
+form{
+    background-color: #ffff;
+    margin-top:3%;
+    width:30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+.userInfo{
+    background-color: darkgrey;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width:85%;
+    height: 50px;
+    padding: 0 28px;
+}
+
+select{
+    width:47%;
+    height:30px;
+    border:2px solid #d5d7d8;
+    border-radius:5px;
+    color: darkgrey;
+    font-weight: 600;
+    font-size: 18px;
+}
+.PIB{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width:85%;
+}
+.PIB div{
+    width:47%;
+}
+form div {
+    width:85%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+label{
+    margin: 0 0 -7px 10px;
+    width: fit-content;
+    background-color: #ffff;
+    z-index: 1;
+    font-size: 16px;
+    font-family: Roboto;
+}
+form input{
+    width:100%;
+    height:30px;
+    border:2px solid #d5d7d8;
+    border-radius:5px;
+    font-size: 18px;
+}
+.buttons{
+    width:80%;
+    margin:10px;
+}
+button{
+    height: 35px;
+    background-color: #2d4b48;
+    border-radius: 10px;
+    color: #ffff;
+    font-family: "Times New Roman";
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.link{
+    text-decoration: none;
+    height: 40px;
+    padding: 0 15px;
+    background-color: #2d4b48;
+    border-radius: 10px;
+    font-size: 18px;
+    font-family: Roboto;
+    font-weight: bold;
+    color: #ffff;
+    display: flex;
+    align-items: center;
+}
+span{
+    color: red;
+}
