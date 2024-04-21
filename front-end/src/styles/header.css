@@ -1,0 +1,23 @@
+.header{
+    background-color: #24622A;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.header-links-container{
+    width:15%;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5%;
+}
+.header-links-container-logout{
+    width:5%;
+    margin-right: 1%;
+}
+.header-link{
+    color: #D0D2C6;
+    text-decoration: none;
+    cursor: pointer;
+}
