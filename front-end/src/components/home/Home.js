@@ -7,7 +7,7 @@ function Home() {
 
     return(
         <>
-            <div>Home {currentUser.email}</div>
+            <div>Home {currentUser?.email}</div>
         </>
     )
 }

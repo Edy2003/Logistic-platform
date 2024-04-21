@@ -5,10 +5,6 @@ import {onAuthStateChanged} from "firebase/auth"
 const AuthContext = React.createContext();
 
 export function useAuth(){
-    return useContext(AuthContext);
-}
-
-export function AuthProvider({ children }) {
     const [currentUser, setcurrentUser] = React.useState(null);
     const [userLoggedIn, setUserLoggedIn] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
@@ -29,7 +25,13 @@ export function AuthProvider({ children }) {
 
         setLoading(false);
     }
+    return {currentUser, userLoggedIn, loading}
+    // return useContext(AuthContext);
+    // return {userLoggedIn:true, currentUser: {}};
+}
 
+export function AuthProvider({ children }) {
+    const {currentUser, userLoggedIn, loading} = useAuth();
     const value ={
         currentUser,
         userLoggedIn,

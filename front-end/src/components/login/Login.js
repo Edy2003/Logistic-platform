@@ -24,10 +24,18 @@ function Login() {
         e.preventDefault()
         if(!isSignIn){
             setIsSignIn(true);
-            doSignInWithGoogle().catch(err=>{
+            doSignInWithGoogle().finally(err=>{
                 setIsSignIn(false)
             });
         }
+    }
+
+    const emailChangeHandler = (e) => {
+        setEmail(e.target.value);
+    }
+
+    const passwordChangeHandler = (e) => {
+        setPassword(e.target.value);
     }
 
     return(
@@ -37,15 +45,15 @@ function Login() {
                 <form action='' onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor='email'>Email</label>
-                        <input type='email' id='email' name='email' placeholder='Email'/>
+                        <input onChange={emailChangeHandler} type='email' id='email' name='email' placeholder='Email'/>
                     </div>
                     <div>
                         <label htmlFor='password'>Password</label>
-                        <input type='password' id='password' name='password' placeholder='Password'/>
+                        <input onChange={passwordChangeHandler} type='password' id='password' name='password' placeholder='Password'/>
                     </div>
                     <button type="submit">Login</button>
                     <button type="button"
-                            onClick={(e)=>{onGoogleSignIn(e)}}>
+                            onClick={onGoogleSignIn}>
                         Login with Google
                     </button>
                     <Link to='/signup' type="submit">Create Account</Link>
