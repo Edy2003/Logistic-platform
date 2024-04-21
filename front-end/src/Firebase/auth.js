@@ -1,4 +1,4 @@
-import {auth} from '../Firebase/firebase'
+import {auth} from './firebase'
 
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
 
