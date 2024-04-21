@@ -1,40 +1,54 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import loginValidation from "./loginValidation";
+import {doSignInWithEmailAndPassword, doSignInWithGoogle} from "../../Firebase/auth";
+import {useAuth} from "../../contexts/authContext";
 
 function Login() {
 
-    const [values, setValues] = React.useState({
-        email:'',
-        password:''
-    });
-    const [errors,setErrors] = React.useState({})
+    const {userLoggedIn} = useAuth();
 
-    function handleSubmit(e){
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [isSignIn, setIsSignIn] = React.useState(false);
+    const [errorMessage,setErrorMessage] = React.useState({})
+
+    async function handleSubmit (e){
         e.preventDefault();
-        setErrors(loginValidation(values));
+        if(!isSignIn){
+            setIsSignIn(true);
+            await doSignInWithEmailAndPassword(email,password);
+        }
     }
 
-    function handleInput(e){
-        setValues(prev => ({...prev, [e.target.name]: e.target.value}));
+    function onGoogleSignIn (e){
+        e.preventDefault()
+        if(!isSignIn){
+            setIsSignIn(true);
+            doSignInWithGoogle().catch(err=>{
+                setIsSignIn(false)
+            });
+        }
     }
+
     return(
         <>
+            {userLoggedIn && <Navigate to={'/home'} replace={true}/>}
             <div>
                 <form action='' onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor='email'>Email</label>
-                        <input type='email' id='email' name='email' placeholder='Email'
-                               onChange={handleInput}/>
-                        {errors.email && <span className='red'>{errors.email}</span>}
+                        <input type='email' id='email' name='email' placeholder='Email'/>
                     </div>
                     <div>
                         <label htmlFor='password'>Password</label>
-                        <input type='password' id='password' name='password' placeholder='Password'
-                               onChange={handleInput}/>
-                        {errors.password && <span className='red'>{errors.password}</span>}
+                        <input type='password' id='password' name='password' placeholder='Password'/>
                     </div>
                     <button type="submit">Login</button>
+                    <button type="button"
+                            onClick={(e)=>{onGoogleSignIn(e)}}>
+                        Login with Google
+                    </button>
                     <Link to='/signup' type="submit">Create Account</Link>
                 </form>
             </div>

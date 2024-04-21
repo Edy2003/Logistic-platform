@@ -1,6 +1,6 @@
 import {auth} from '../Firebase/firebase'
 
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider} from 'firebase/auth'
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup} from 'firebase/auth'
 
 export const doCreateUserWithEmailAndPassword = async (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
