@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link, Navigate, useNavigate} from "react-router-dom";
-import {doSignInWithEmailAndPassword} from "../../Firebase/auth";
+import {doCreateUserWithEmailAndPassword, doSignInWithEmailAndPassword} from "../../Firebase/auth";
 import {useAuth} from "../../contexts/authContext";
 
 function Signup() {
@@ -17,10 +17,22 @@ function Signup() {
     async function handleSubmit (e){
         e.preventDefault();
         if(!isRegistering){
-            setIsRegistering(true);
-            await doSignInWithEmailAndPassword(email,password);
+            try{
+                setIsRegistering(true);
+                await doCreateUserWithEmailAndPassword(email,password).finally(()=>{
+                    setIsRegistering(false);
+                });
+            }catch (e){
+                alert(JSON.stringify(e))
+            }
         }
     }
+
+    const inputChangeHandler = (e, handler) => {
+        handler(e.target.value)
+    }
+
+    console.log(email, password)
 
     return(
         <>
@@ -37,11 +49,11 @@ function Signup() {
                     </div>
                     <div>
                         <label htmlFor='email'>Email</label>
-                        <input type='email' id='email' name='email' placeholder='Email'/>
+                        <input onChange={(e)=>{inputChangeHandler(e, setEmail)}} type='email' id='email' name='email' placeholder='Email'/>
                     </div>
                     <div>
                         <label htmlFor='password'>Password</label>
-                        <input type='password' id='password' name='password' placeholder='Password'/>
+                        <input onChange={(e)=>{inputChangeHandler(e, setPassword)}} type='password' id='password' name='password' placeholder='Password'/>
                     </div>
                     <button type="submit" >Sign-up</button>
                     <Link to='/' type="submit">Log in</Link>
