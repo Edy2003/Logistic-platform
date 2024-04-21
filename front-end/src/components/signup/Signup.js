@@ -1,6 +1,5 @@
 import React from 'react';
 import {Link, Navigate, useNavigate} from "react-router-dom";
-import signupValidation from "./signupValidation";
 import {doSignInWithEmailAndPassword} from "../../Firebase/auth";
 import {useAuth} from "../../contexts/authContext";
 

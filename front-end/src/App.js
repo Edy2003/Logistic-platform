@@ -7,7 +7,6 @@ import Header from "./components/header/header";
 
 function App() {
   return (
-      <>
           <BrowserRouter>
               <Header/>
               <Routes>
@@ -16,7 +15,6 @@ function App() {
                   <Route path="/home" element={<Home />} />
               </Routes>
           </BrowserRouter>
-      </>
   );
 }
 
