@@ -19,9 +19,12 @@ function Header (){
 
                 </div>
                 :
-                <div className='header-links-container'>
-                    <Link to={'/'} className='header-link'>Увійти</Link>
-                    <Link to={'signup'} className='header-link'> Зареєструватись</Link>
+                <div className='header-container'>
+                    <p className='logo'>Logistic Platform</p>
+                    <div className='header-links-container'>
+                        <Link to={'/'} className='header-link'>Увійти</Link>
+                        <Link to={'signup'} className='header-link'> Зареєструватись</Link>
+                    </div>
                 </div>}
         </div>
     )

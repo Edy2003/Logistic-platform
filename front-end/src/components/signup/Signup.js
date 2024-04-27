@@ -50,26 +50,25 @@ function Signup() {
     return (
         <>
             {userLoggedIn && <Navigate to={'/home'} replace={true} />}
-            <div>
+            <div className='login-form'>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor='name'>Name</label>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Name</p></span>
                         <input type='text' onChange={inputChangeHandler} id='name' name='name' placeholder='Name' value={usersInfo.name} />
                     </div>
-                    <div>
-                        <label htmlFor='surname'>Surname</label>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Surname</p></span>
                         <input type='text' onChange={inputChangeHandler} id='surname' name='surname' placeholder='Surname' value={usersInfo.surname} />
                     </div>
-                    <div>
-                        <label htmlFor='email'>Email</label>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Email</p></span>
                         <input onChange={(e) => setEmail(e.target.value)} type='email' id='email' name='email' placeholder='Email' value={email} />
                     </div>
-                    <div>
-                        <label htmlFor='password'>Password</label>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Password</p></span>
                         <input onChange={(e) => setPassword(e.target.value)} type='password' id='password' name='password' placeholder='Password' value={password} />
                     </div>
-                    <button type="submit">Sign-up</button>
-                    <Link to='/'>Log in</Link>
+                    <button type="submit">Зареєструватись</button>
                 </form>
                 {errorMessage && <p>{errorMessage}</p>}
             </div>

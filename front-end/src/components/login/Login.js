@@ -2,6 +2,8 @@ import React from "react";
 import {Link, Navigate} from "react-router-dom";
 import {doSignInWithEmailAndPassword, doSignInWithGoogle} from "../../Firebase/auth";
 import {useAuth} from "../../contexts/authContext";
+import '../../styles/login-form.css'
+import google from '../../google.png'
 
 function Login() {
 
@@ -41,22 +43,23 @@ function Login() {
     return(
         <>
             {userLoggedIn && <Navigate to={'/home'} replace={true}/>}
-            <div>
-                <form action='' onSubmit={handleSubmit}>
-                    <div>
-                        <label htmlFor='email'>Email</label>
-                        <input onChange={emailChangeHandler} type='email' id='email' name='email' placeholder='Email'/>
+            <div className='login-form'>
+                <form onSubmit={handleSubmit}>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Email</p></span>
+                        <input onChange={emailChangeHandler} type='email' id='email' name='email'
+                               placeholder='Введіть Email'/>
                     </div>
-                    <div>
-                        <label htmlFor='password'>Password</label>
-                        <input onChange={passwordChangeHandler} type='password' id='password' name='password' placeholder='Password'/>
+                    <div className='form-inputs'>
+                        <span className='label'><p>Password</p></span>
+                        <input onChange={passwordChangeHandler} type='password' id='password' name='password'
+                               placeholder='Введіть пароль'/>
                     </div>
-                    <button type="submit">Login</button>
                     <button type="button"
                             onClick={onGoogleSignIn}>
-                        Login with Google
+                        Увійти через Google <img src={google} alt='google'/>
                     </button>
-                    <Link to='/signup' type="submit">Create Account</Link>
+                    <button type="submit">Увійти</button>
                 </form>
             </div>
         </>
