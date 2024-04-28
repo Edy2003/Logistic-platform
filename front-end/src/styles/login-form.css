@@ -26,6 +26,17 @@ form{
     flex-direction: column;
     width: 75%;
 }
+.form-type{
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}
+.form-type-inputs{
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
 .label{
     z-index: 2;
 }
@@ -37,7 +48,7 @@ form{
     background-color: #e5e5e5;
     width: fit-content;
 }
-input{
+select,option,input{
     z-index: 1;
     width:100%;
     height: 30px;
@@ -48,6 +59,7 @@ input{
 
 button{
     display: flex;
+    height: 30px;
     margin: 10px 0 0;
     color: #425d5a;
     font-size: 14px;
