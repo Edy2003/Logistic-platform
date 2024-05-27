@@ -11,12 +11,13 @@ function Info(){
         <>
             {userData && (
                 <div className='main-area'>
-                    <div>Home</div>
-                    <p>Email: {currentUser.email}</p>
-                    <p>Name: {userData.name}</p>
-                    <p>Surname: {userData.surname}</p>
-                    <p>Status: {userData.status}</p>
-                    <p>Type: {userData.type}</p>
+                    <div className='order create info'>
+                        <p>Email: {currentUser.email}</p>
+                        <p>Name: {userData.name}</p>
+                        <p>Surname: {userData.surname}</p>
+                        <p>Status: {userData.status}</p>
+                        <p>Type: {userData.type}</p>
+                    </div>
                 </div>)}
         </>
     )

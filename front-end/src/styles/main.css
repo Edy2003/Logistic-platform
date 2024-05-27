@@ -51,3 +51,39 @@ body{
     margin: 3px 0;
     height: auto;
 }
+.history{
+    justify-content: center;
+}
+.create{
+    width:45%;
+    height: auto;
+    flex-direction: column;
+}
+.order-form{
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.form-input{
+    width: 40%;
+}
+.order-form p{
+    margin: 10px 8px 2px;
+    color: #425d5a;
+    font-size: 14px;
+    font-weight: 500;
+}
+.create button{
+    margin-bottom: 5px;
+}
+.info{
+    align-items: flex-start;
+    width: 35%;
+}
+.info p{
+    margin-left: 3%;
+    color: #425d5a;
+    font-size: 18px;
+    font-weight: 500;
+}
