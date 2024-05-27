@@ -42,7 +42,7 @@ function Login() {
 
     return(
         <>
-            {userLoggedIn && <Navigate to={'/home'} replace={true}/>}
+            {userLoggedIn ? <Navigate to={'/'} replace={true}/> :
             <div className='login-form'>
                 <form onSubmit={handleSubmit}>
                     <div className='form-inputs'>
@@ -61,7 +61,7 @@ function Login() {
                     </button>
                     <button type="submit">Увійти</button>
                 </form>
-            </div>
+            </div>}
         </>
     )
 }

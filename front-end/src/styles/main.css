@@ -1,0 +1,53 @@
+body{
+    background-color: #e5e5e5;
+}
+.main-area{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 120px;
+    margin: 0 5%;
+}
+.leaflet-container {
+    height: 450px;
+    width: 80%;
+}
+.map{
+    width: 100%;
+}
+.orders-title{
+    margin: -17px 8px 10px;
+    color: #425d5a;
+    font-size: 18px;
+    font-weight: 500;
+    background-color: #e5e5e5;
+    width: fit-content;
+}
+.orders{
+    border: #425d5a solid 2px;
+    border-radius: 10px;
+    height: 450px;
+    width: 60%;
+    padding: 0 2%;
+}
+.order{
+    margin: 1.5% 0;
+    width: auto;
+    height: 50px;
+    border: #425d5a solid 1.5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 12px;
+    font-weight: 500;
+    color: #425d5a;
+}
+.city{
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+}
+.city p{
+    margin: 3px 0;
+    height: auto;
+}
