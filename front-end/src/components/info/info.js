@@ -1,6 +1,7 @@
 import '../../styles/main.css'
 import {useAuth} from "../../contexts/authContext";
 import React from "react";
+import avatar from '../../avatar-design.png'
 
 function Info(){
     const { currentUser } = useAuth();
@@ -18,6 +19,7 @@ function Info(){
                         <p>Status: {userData.status}</p>
                         <p>Type: {userData.type}</p>
                     </div>
+                    <div className='logo'><img src={avatar} width='50%'/></div>
                 </div>)}
         </>
     )

@@ -13,7 +13,7 @@ function Home() {
             {userData && (
                 <div className='main-area'>
                     <div className='map'>
-                        <MapContainer center={[49.34, 25.36]} zoom={9} scrollWheelZoom={false}>
+                        <MapContainer center={[49.34, 25.36]} zoom={10} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=ARHbwD2WGESwbnMdlmyQ"

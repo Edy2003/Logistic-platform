@@ -87,3 +87,22 @@ body{
     font-size: 18px;
     font-weight: 500;
 }
+.logo{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.get {
+    width: 60%;
+    height: auto;
+}
+.center-align{
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.filter-orders{
+    margin-top: 15px;
+    height: 220px;
+}
