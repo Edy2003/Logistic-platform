@@ -1,15 +1,16 @@
-import {auth} from "../../Firebase/firebase"
-import React, {useContext, useEffect, useState} from "react";
-import {onAuthStateChanged} from "firebase/auth"
-import {get, getDatabase, ref} from "firebase/database";
+import { auth } from "../../Firebase/firebase";
+import React, { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { get, getDatabase, ref, query, orderByChild, equalTo } from "firebase/database";
 
 const AuthContext = React.createContext();
 
-export function useAuth(){
-    const [currentUser, setcurrentUser] = React.useState(null);
-    const [userLoggedIn, setUserLoggedIn] = React.useState(false);
-    const [loading, setLoading] = React.useState(true);
+export function useAuth() {
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userLoggedIn, setUserLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [userData, setUserData] = useState(null);
+    const [userOrders, setUserOrders] = useState([]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, initializeUser);
@@ -30,37 +31,53 @@ export function useAuth(){
             }).catch((error) => {
                 console.error("Error getting user data:", error);
             });
+
+            // Load user orders
+            const ordersRef = query(ref(database, 'orders'), orderByChild('creatorUserId'), equalTo(currentUser.uid));
+            get(ordersRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const orders = [];
+                    snapshot.forEach((childSnapshot) => {
+                        orders.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                    });
+                    setUserOrders(orders);
+                } else {
+                    console.log("No orders available");
+                }
+            }).catch((error) => {
+                console.error("Error getting user orders:", error);
+            });
         }
     }, [currentUser]);
 
-
     async function initializeUser(user) {
-        if (user){
-            setcurrentUser({...user})
+        if (user) {
+            setCurrentUser({ ...user });
             setUserLoggedIn(true);
-        }else{
-            setcurrentUser(null);
+        } else {
+            setCurrentUser(null);
             setUserLoggedIn(false);
         }
 
         setLoading(false);
     }
-    return {currentUser, userLoggedIn, loading,userData}
-    // return useContext(AuthContext);
-    // return {userLoggedIn:true, currentUser: {}};
+
+    return { currentUser, userLoggedIn, loading, userData, userOrders };
 }
 
 export function AuthProvider({ children }) {
-    const {currentUser, userLoggedIn, loading} = useAuth();
-    const value ={
+    const { currentUser, userLoggedIn, loading, userData, userOrders } = useAuth();
+    const value = {
         currentUser,
         userLoggedIn,
-        loading
-    }
+        loading,
+        userData,
+        userOrders
+    };
 
     return (
         <AuthContext.Provider value={value}>
             {!loading && children}
         </AuthContext.Provider>
-    )
+    );
 }

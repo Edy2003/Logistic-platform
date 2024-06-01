@@ -42,7 +42,7 @@ function Login() {
 
     return(
         <>
-            {userLoggedIn ? <Navigate to={'/'} replace={true}/> :
+            {userLoggedIn ? <Navigate to={'/home'} replace={true}/> :
             <div className='login-form'>
                 <form onSubmit={handleSubmit}>
                     <div className='form-inputs'>
