@@ -85,22 +85,22 @@ function CreateOrder() {
                     <button type='submit'>Створити</button>
                 </form>
             </div>
-            <div className='orders'>
-                <p className='orders-title'>Замовлення</p>
-                {userCreatedOrders.length > 0 ? (
-                    userCreatedOrders.map((order) => (
-                        <div key={order.id} className='order'>
-                            <p>Назва вантажу: {order.name}</p>
-                            <p>Вага: {order.weight}</p>
-                            <p>Вартість за тонну: {order.cost}</p>
-                            <p>Місто: {order.city}</p>
-                            <p>Термін: {order.deadline}</p>
-                        </div>
-                    ))
-                ) : (
-                    <div className='order'>У вас поки немає замовлень</div>
-                )}
-            </div>
+            {/*<div className='orders'>*/}
+            {/*    <p className='orders-title'>Замовлення</p>*/}
+            {/*    {userCreatedOrders.length > 0 ? (*/}
+            {/*        userCreatedOrders.map((order) => (*/}
+            {/*            <div key={order.id} className='order'>*/}
+            {/*                <p>Назва вантажу: {order.name}</p>*/}
+            {/*                <p>Вага: {order.weight}</p>*/}
+            {/*                <p>Вартість за тонну: {order.cost}</p>*/}
+            {/*                <p>Місто: {order.city}</p>*/}
+            {/*                <p>Термін: {order.deadline}</p>*/}
+            {/*            </div>*/}
+            {/*        ))*/}
+            {/*    ) : (*/}
+            {/*        <div className='order'>У вас поки немає замовлень</div>*/}
+            {/*    )}*/}
+            {/*</div>*/}
         </div>
     );
 }

@@ -108,3 +108,16 @@ body{
     margin-top: 15px;
     height: 220px;
 }
+
+.leaflet-right{
+    visibility: hidden;
+}
+.leaflet-right:nth-last-child(2){
+    visibility: visible;
+}
+.leaflet-marker-icon img{
+    visibility: hidden!important;
+}
+
+
+

@@ -7,6 +7,7 @@ import axios from "axios";
 import '../../styles/main.css';
 import L from 'leaflet';
 import 'leaflet-routing-machine';
+import LeafletRoutingMachine from "../../Leaflet/LeafletRoutingMachine";
 
 
 function Home() {
@@ -16,15 +17,12 @@ function Home() {
     const [city1Coords, setCity1Coords] = useState({ lat: 0, lon: 0 });
     const [city2Coords, setCity2Coords] = useState({ lat: 0, lon: 0 });
     const [selectedCities, setSelectedCities] = useState([]);
-    const [mapLoaded, setMapLoaded] = useState(false);
-    const [selectedOrder, setSelectedOrder] = useState(null); // Додали стейт для збереження обраного замовлення
+    const [selectedOrder, setSelectedOrder] = useState(null);
     const db = getDatabase();
 
-    const mapRef = useRef(null);
-
     const customIcon = new L.Icon({
-        iconUrl: require('../../map-icon.png'), // шлях до вашого файлу зображення
-        iconSize: [20, 20], // розміри вашої іконки
+        iconUrl: require('../../map-icon.png'),
+        iconSize: [20, 20],
     });
 
     useEffect(() => {
@@ -34,7 +32,7 @@ function Home() {
                 const orders = [];
                 snapshot.forEach((childSnapshot) => {
                     const order = { id: childSnapshot.key, ...childSnapshot.val() };
-                    if (!order.status) { // Фільтрація замовлень зі статусом false
+                    if (!order.status) {
                         orders.push(order);
                     }
                 });
@@ -53,7 +51,6 @@ function Home() {
             setUsers(usersData);
         });
     }, [db]);
-
 
     const userRelatedOrders = userOrders.filter(order =>
         order.creatorUserId === currentUser.uid ||
@@ -87,7 +84,7 @@ function Home() {
         }
 
         const orderRef = ref(db, `orders/${orderId}`);
-        const updateData = { status: true }; // Оновлення статусу на "виконано"
+        const updateData = { status: true };
 
         try {
             await update(orderRef, updateData);
@@ -97,9 +94,10 @@ function Home() {
         }
         setSelectedOrder(orderId);
     };
+
     const handleOrderClickDriver = async (orderId, order) => {
         setSelectedOrder(orderId);
-
+        setSelectedCities([])
         const cityName1 = order.city;
         const cityName2 = order.producers_city;
 
@@ -132,12 +130,13 @@ function Home() {
         }
     };
 
+
     return (
         <>
             {userData && (
                 <div className='main-area'>
                     <div className='map'>
-                        <MapContainer center={[49.34, 25.36]} zoom={10} scrollWheelZoom={false} ref={mapRef}>
+                        <MapContainer center={[49.34, 25.36]} zoom={10} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=ARHbwD2WGESwbnMdlmyQ"
@@ -147,6 +146,7 @@ function Home() {
                                     <Popup>{`Місто ${index + 1}`}</Popup>
                                 </Marker>
                             ))}
+                            <LeafletRoutingMachine cities={selectedCities}/>
                         </MapContainer>
                     </div>
                     <div className='orders'>
