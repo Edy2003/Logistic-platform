@@ -1,76 +1,78 @@
-import '../../styles/main.css'
-import React from "react";
+import '../../styles/main.css';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/authContext";
+import { getDatabase, onValue, ref } from "firebase/database";
 
-function Orders(){
+function Orders() {
+    const { userData, currentUser } = useAuth();
+    const [userOrders, setUserOrders] = useState([]);
+    const [users, setUsers] = useState({});
+    const db = getDatabase();
 
+    useEffect(() => {
+        if (currentUser) {
+            const ordersRef = ref(db, 'orders');
+            onValue(ordersRef, (snapshot) => {
+                const orders = [];
+                snapshot.forEach((childSnapshot) => {
+                    const order = { id: childSnapshot.key, ...childSnapshot.val() };
+                    if (order.status) { // Фільтрація замовлень зі статусом true
+                        orders.push(order);
+                    }
+                });
+                setUserOrders(orders);
+            });
+        }
+    }, [currentUser, db]);
 
-    return(
+    useEffect(() => {
+        const usersRef = ref(db, 'users');
+        onValue(usersRef, (snapshot) => {
+            const usersData = {};
+            snapshot.forEach((childSnapshot) => {
+                usersData[childSnapshot.key] = childSnapshot.val();
+            });
+            setUsers(usersData);
+        });
+    }, [db]);
+
+    const getUserName = (userId) => {
+        if (!userId || !users[userId]) {
+            return 'Не призначено';
+        }
+        return users[userId].name || 'Не призначено';
+    };
+
+    const userRelatedOrders = userOrders.filter(order =>
+        order.creatorUserId === currentUser.uid ||
+        order.driverId === currentUser.uid ||
+        order.producerId === currentUser.uid
+    );
+
+    return (
         <div className='main-area history'>
             <div className='orders'>
-                <p className='orders-title'>Історія Замовленнь</p>
-                <div className='order'>
-                    <p># 1</p>
-                    <div className='city'>
-                        <p>Місто від: Тернопіль</p>
-                        <p>Місто до: Житомир</p>
-                    </div>
-
-                    <p>Вантаж: зерно</p>
-                    <p>Вартість: 3000грн</p>
-                    <p>Вага: 1,5т.</p>
-                    <p className='date'>07.03.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 2</p>
-                    <div className='city'>
-                        <p>Місто від: Вінниця</p>
-                        <p>Місто до: Чернівці</p>
-                    </div>
-
-                    <p>Вантаж: щебінь</p>
-                    <p>Вартість: 35000грн</p>
-                    <p>Вага: 30т.</p>
-                    <p className='date'>20.04.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 3</p>
-                    <div className='city'>
-                        <p>Місто від: Бережани</p>
-                        <p>Місто до: Хмельницьк</p>
-                    </div>
-
-                    <p>Вантаж: пісок</p>
-                    <p>Вартість: 20000грн</p>
-                    <p>Вага: 20т.</p>
-                    <p className='date'>07.05.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 4</p>
-                    <div className='city'>
-                        <p>Місто від: Чортків</p>
-                        <p>Місто до: Зарваниця</p>
-                    </div>
-
-                    <p>Вантаж: дрова</p>
-                    <p>Вартість: 5000грн</p>
-                    <p>Вага: 12т.</p>
-                    <p className='date'>15.05.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 5</p>
-                    <div className='city'>
-                        <p>Місто від: Івано-Франківськ</p>
-                        <p>Місто до: Рівне</p>
-                    </div>
-
-                    <p>Вантаж: щебінь</p>
-                    <p>Вартість: 35000грн</p>
-                    <p>Вага: 28т.</p>
-                    <p className='date'>24.05.2024</p>
-                </div>
+                <p className='orders-title'>Історія Замовлень</p>
+                {userRelatedOrders.length > 0 ? (
+                    userRelatedOrders.map((order) => (
+                        <div key={order.id} className='order'>
+                            <p>Назва вантажу: {order.name}</p>
+                            <p>Вага: {order.weight}</p>
+                            <p>Вартість за тонну: {order.cost}</p>
+                            <p>Місто: {order.city}</p>
+                            <p>Термін: {order.deadline}</p>
+                            <p>Перевізник: {getUserName(order.driverId)}</p>
+                            <p>Виробник: {getUserName(order.producerId)}</p>
+                            <p>Статус: Виконано</p>
+                            <p>Вартість: {order.cost * order.weight} грн.</p>
+                        </div>
+                    ))
+                ) : (
+                    <div className='order'>У вас поки немає замовлень</div>
+                )}
             </div>
         </div>
-    )
+    );
 }
 
-export default Orders
+export default Orders;

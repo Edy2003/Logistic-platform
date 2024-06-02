@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set } from "firebase/database";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {app} from '../../Firebase/firebase'
-import '../../styles/login-form.css'
+import { app } from '../../Firebase/firebase';
+import '../../styles/login-form.css';
 
 function Signup() {
     const navigate = useNavigate();
     const [userLoggedIn, setUserLoggedIn] = useState(false);
-    const [usersInfo, setUsersInfo] = useState({type:'Перевізник', status:'ФОП', name: "", surname: '', email: "", password: "" });
+    const [usersInfo, setUsersInfo] = useState({
+        type: 'Перевізник',
+        status: 'ФОП',
+        name: "",
+        surname: '',
+        email: "",
+        password: "",
+        producers_city: ""  // Нове поле для міста реєстрації
+    });
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isRegistering, setIsRegistering] = useState(false);
@@ -28,14 +35,23 @@ function Signup() {
 
                 // Завантаження даних користувача у базу даних
                 await set(ref(database, 'users/' + user.uid), {
-                    status:usersInfo.status,
-                    type:usersInfo.type,
+                    status: usersInfo.status,
+                    type: usersInfo.type,
                     name: usersInfo.name,
                     surname: usersInfo.surname,
                     email: email,
+                    producers_city: usersInfo.producers_city,  // Додавання міста реєстрації до бази даних
                 });
 
-                setUsersInfo({type:'', status:'', name: "", surname: '', email: "", password: "" });
+                setUsersInfo({
+                    type: 'Перевізник',
+                    status: 'ФОП',
+                    name: "",
+                    surname: '',
+                    email: "",
+                    password: "",
+                    producers_city: ""  // Очищення поля для міста реєстрації
+                });
                 setUserLoggedIn(true);
                 navigate('/home');
             } catch (error) {
@@ -50,6 +66,7 @@ function Signup() {
     const inputChangeHandler = (e) => {
         setUsersInfo(prev => ({ ...prev, [e.target.name]: e.target.value }));
     }
+
     return (
         <>
             {userLoggedIn && <Navigate to={'/home'} replace={true} />}
@@ -75,25 +92,32 @@ function Signup() {
                             </select>
                         </div>
                     </div>
+                    {usersInfo.type === 'Виробник' && (
+                        <div className='form-inputs'>
+                            <span className='label'><p>Місто реєстрації</p></span>
+                            <input type='text' onChange={inputChangeHandler} id='producers_city' name='producers_city' placeholder='Місто реєстрації'
+                                   value={usersInfo.producers_city} />
+                        </div>
+                    )}
                     <div className='form-inputs'>
                         <span className='label'><p>Name</p></span>
                         <input type='text' onChange={inputChangeHandler} id='name' name='name' placeholder='Name'
-                               value={usersInfo.name}/>
+                               value={usersInfo.name} />
                     </div>
                     <div className='form-inputs'>
                         <span className='label'><p>Surname</p></span>
                         <input type='text' onChange={inputChangeHandler} id='surname' name='surname'
-                               placeholder='Surname' value={usersInfo.surname}/>
+                               placeholder='Surname' value={usersInfo.surname} />
                     </div>
                     <div className='form-inputs'>
                         <span className='label'><p>Email</p></span>
                         <input onChange={(e) => setEmail(e.target.value)} type='email' id='email' name='email'
-                               placeholder='Email' value={email}/>
+                               placeholder='Email' value={email} />
                     </div>
                     <div className='form-inputs'>
                         <span className='label'><p>Password</p></span>
                         <input onChange={(e) => setPassword(e.target.value)} type='password' id='password'
-                               name='password' placeholder='Password' value={password}/>
+                               name='password' placeholder='Password' value={password} />
                     </div>
                     <button type="submit">Зареєструватись</button>
                 </form>

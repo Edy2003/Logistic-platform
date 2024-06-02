@@ -26,13 +26,13 @@ body{
     border: #425d5a solid 2px;
     border-radius: 10px;
     height: auto;
-    width: 60%;
+    width: 95%;
     padding: 0 2%;
 }
 .order{
     margin: 1.5% 0;
     width: auto;
-    height: 50px;
+    height: auto;
     border: #425d5a solid 1.5px;
     border-radius: 10px;
     display: flex;
@@ -41,6 +41,7 @@ body{
     font-size: 12px;
     font-weight: 500;
     color: #425d5a;
+    flex-wrap: wrap;
 }
 .city{
     height: 50px;

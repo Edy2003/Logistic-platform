@@ -19,7 +19,7 @@ function Header (){
                     <p className='logo'><Link to={'/home'} className='header-link'>Logistic platform</Link></p>
                     <div className='header-links-container'>
                         <Link to={'/home/orders'} className='header-link'>Мої замовлення</Link>
-                        {(userData.type)==='Перевізник' ? <Link to={'/home/get-order'} className='header-link'>Прийняти замовлення</Link>
+                        {(userData.type) === 'Перевізник'||(userData.type) === 'Виробник' ? <Link to={'/home/get-order'} className='header-link'>Прийняти замовлення</Link>
                             : <Link to={'/home/create-order'} className='header-link'>Створити замовлення</Link> }
                         <Link to={'/home/info'} className='header-link'>Про тебе</Link>
                     </div>

@@ -1,79 +1,115 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getDatabase, ref, onValue, update } from "firebase/database";
+import { useAuth } from "../../contexts/authContext";
 
 function GetOrder() {
+    const { currentUser, userData } = useAuth();
+    const [orders, setOrders] = useState([]);
+    const [filteredOrders, setFilteredOrders] = useState([]);
+    const [filters, setFilters] = useState({
+        name: '',
+        weight: '',
+        cityFrom: '',
+        cityTo: '',
+        cost: '',
+        deadline: ''
+    });
+    const db = getDatabase();
 
-    return(
+    useEffect(() => {
+        const ordersRef = ref(db, 'orders');
+        onValue(ordersRef, (snapshot) => {
+            const ordersList = [];
+            snapshot.forEach((childSnapshot) => {
+                ordersList.push({ id: childSnapshot.key, ...childSnapshot.val() });
+            });
+            setOrders(ordersList);
+            setFilteredOrders(ordersList);
+        });
+    }, [db]);
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value
+        }));
+    };
+
+    const handleFilterSubmit = (e) => {
+        e.preventDefault();
+        const filtered = orders.filter((order) => {
+            return Object.keys(filters).every(key => {
+                if (!filters[key]) return true;
+                return order[key] && order[key].toLowerCase().includes(filters[key].toLowerCase());
+            });
+        });
+        setFilteredOrders(filtered);
+    };
+
+    const handleSelectOrder = async (orderId) => {
+        if (!currentUser) {
+            console.error("Користувач не автентифікований");
+            return;
+        }
+        const orderRef = ref(db, `orders/${orderId}`);
+        const updateData = userData.type === 'Перевізник' ? { driverId: currentUser.uid } : { producerId: currentUser.uid, producers_city: userData.producers_city };
+        await update(orderRef, updateData);
+    };
+
+    return (
         <div className='main-area center-align'>
             <div className='order create get'>
-                <form className='order-form'>
-                    <div className='form-input'>
-                        <span><p>Назва вантажу</p></span>
-                        <input type='text' placeholder='Введіть назву'/>
-                    </div>
-                    <div className='form-input'>
-                        <span><p>Вага</p></span>
-                        <input type='text' placeholder='Введіть вагу'/>
-                    </div>
-                    <div className='form-input'>
-                        <span><p>Місто з</p></span>
-                        <input type='text' placeholder='Введіть місто'/>
-                    </div>
-                    <div className='form-input'>
-                        <span><p>Місто до</p></span>
-                        <input type='text' placeholder='Введіть місто'/>
-                    </div>
-                    <div className='form-input'>
-                        <span><p>Вартість за тонну</p></span>
-                        <input type='text' placeholder='Введіть вартість'/>
-                    </div>
-                    <div className='form-input'>
-                        <span><p>Термін</p></span>
-                        <input type='date' placeholder='Введіть термін'/>
-                    </div>
+                <form className='order-form' onSubmit={handleFilterSubmit}>
+                    <form className='order-form' onSubmit={handleFilterSubmit}>
+                        <div className='form-input'>
+                            <span><p>Назва вантажу</p></span>
+                            <input type='text' name='name' placeholder='Введіть назву' value={filters.name} onChange={handleFilterChange} />
+                        </div>
+                        <div className='form-input'>
+                            <span><p>Вага</p></span>
+                            <input type='text' name='weight' placeholder='Введіть вагу' value={filters.weight} onChange={handleFilterChange} />
+                        </div>
+                        <div className='form-input'>
+                            <span><p>Місто з</p></span>
+                            <input type='text' name='cityFrom' placeholder='Введіть місто' value={filters.cityFrom} onChange={handleFilterChange} />
+                        </div>
+                        <div className='form-input'>
+                            <span><p>Вартість за тонну</p></span>
+                            <input type='text' name='cost' placeholder='Введіть вартість' value={filters.cost} onChange={handleFilterChange} />
+                        </div>
+                        <div className='form-input'>
+                            <span><p>Термін</p></span>
+                            <input type='date' name='deadline' placeholder='Введіть термін' value={filters.deadline} onChange={handleFilterChange} />
+                        </div>
+                        <button type='submit'>Знайти</button>
+                    </form>
                 </form>
-                <button type='button'>Знайти</button>
             </div>
             <div className='orders filter-orders'>
-                <p className='orders-title'>Доступні замовленнь</p>
-                <div className='order'>
-                    <p># 1</p>
-                    <div className='city'>
-                        <p>Місто від: Тернопіль</p>
-                        <p>Місто до: Житомир</p>
-                    </div>
-
-                    <p>Вантаж: зерно</p>
-                    <p>Вартість: 3000грн</p>
-                    <p>Вага: 1,5т.</p>
-                    <p className='date'>16.05.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 2</p>
-                    <div className='city'>
-                        <p>Місто від: Тернопіль</p>
-                        <p>Місто до: Житомир</p>
-                    </div>
-
-                    <p>Вантаж: зерно</p>
-                    <p>Вартість: 35000грн</p>
-                    <p>Вага: 30т.</p>
-                    <p className='date'>16.05.2024</p>
-                </div>
-                <div className='order'>
-                    <p># 3</p>
-                    <div className='city'>
-                        <p>Місто від: Тернопіль</p>
-                        <p>Місто до: Житомир</p>
-                    </div>
-
-                    <p>Вантаж: зерно</p>
-                    <p>Вартість: 20000грн</p>
-                    <p>Вага: 20т.</p>
-                    <p className='date'>16.05.2024</p>
-                </div>
+                <p className='orders-title'>Доступні замовлення</p>
+                {filteredOrders.length > 0 ? (
+                    filteredOrders.map((order) => (
+                        // Додамо умову для перевірки заповнення полів driverId та producerId
+                        (!order.driverId && !order.producerId) && (
+                            <div key={order.id} className='order'>
+                                <p>Назва вантажу: {order.name}</p>
+                                <p>Вага: {order.weight}</p>
+                                <p>Місто з: {order.cityFrom}</p>
+                                <p>Місто до: {order.cityTo}</p>
+                                <p>Вартість за тонну: {order.cost}</p>
+                                <p>Термін: {order.deadline}</p>
+                                {/* Кнопка обрати замовлення */}
+                                <button onClick={() => handleSelectOrder(order.id)}>Обрати</button>
+                            </div>
+                        )
+                    ))
+                ) : (
+                    <div className='order'>Немає доступних замовлень</div>
+                )}
             </div>
         </div>
-    )
+    );
 }
 
-export default GetOrder
+export default GetOrder;
