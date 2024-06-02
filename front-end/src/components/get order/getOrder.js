@@ -91,7 +91,7 @@ function GetOrder() {
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
                         // Додамо умову для перевірки заповнення полів driverId та producerId
-                        (!order.driverId && !order.producerId) && (
+                        (!order.driverId || !order.producerId) && (
                             <div key={order.id} className='order'>
                                 <p>Назва вантажу: {order.name}</p>
                                 <p>Вага: {order.weight}</p>
